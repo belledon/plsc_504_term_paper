@@ -23,6 +23,7 @@ placebo_test <- lapply(placebo_dependent_vars, function(d) run_iv(d, righthand))
 
 texreg(placebo_test,
        file = "table1.tex",
+       label = "table1",
        stars = c(0.01, 0.05, 0.1),
        custom.coef.map = list(secular_win = "Prop. Secular Win", 
                               secular_close_race = "Prop. Secular Clost Race"),
@@ -40,6 +41,7 @@ itt_results <- lapply(dependent_vars, function(d) run_iv(d, righthand))
 
 texreg(itt_results,
        file = "table2.tex",
+       label = "table2",
        stars = c(0.01, 0.05, 0.1),
        custom.coef.map = list(secular_win = "Prop. Secular Win",
                               secular_close_race = "Prop. Secular Clost Race"),
@@ -63,6 +65,7 @@ dim_results <- lapply(dependent_vars, function(d) run_dim(d, dim_right_hand, dim
 
 texreg(dim_results,
        file = "table3.tex",
+       label = "table3",
        stars = c(0.01, 0.05, 0.1),
        custom.coef.map = list(secular_close_win_dummy = "Secularist Close Win"),
        custom.model.names = c("Any Event", "Event Count", "Any Killed", "Number Killed", "Number Days"),
@@ -87,6 +90,7 @@ lag_killed3 <- with(data, lm_robust(any_lagged_killed ~ secular_close_race + fac
 
 texreg(list(lag_killed1, lag_killed2, lag_killed3),
        file = "table4.tex",
+       label = "table4",
        stars = c(0.01, 0.05, 0.1),
        custom.coef.map = list(secular_close_race = "Secularist Close Race"),
        custom.model.names = c("No Fixed Effects", "Disctrict Cluster FE", "Disctrict Cluster + Province-Year FEs"),
@@ -136,6 +140,7 @@ mech4 <- with(mech_data,
 
 texreg(list(mech1, mech2, mech3, mech4),
        file = "table5.tex",
+       label = "table5",
        stars = c(0.01, 0.05, 0.1),
        custom.coef.map = list(secular_vote_prop_current = "Secular Party Vote Share",
                               interaction = "Prop. Secular (t-1) x Any violence",
@@ -151,17 +156,17 @@ texreg(list(mech1, mech2, mech3, mech4),
 
 ## Table 6, secular/ non-secular candidate differences
 
-data <- read_dta("mna_close_elections_final.dta")
-#feudal first_election elections_won_previously elections_cont_previously cab_after_elec cabinet_position swiched_btw_sec_nonsec
-to_summarize <- c("sect", "feudal", "first_election", "elections_won_previously", "elections_cont_previously",
-                  "cab_after_elec", "cabinet_position" ,"swiched_btw_sec_nonsec")
+## data <- read_dta("mna_close_elections_final.dta")
+## #feudal first_election elections_won_previously elections_cont_previously cab_after_elec cabinet_position swiched_btw_sec_nonsec
+## to_summarize <- c("sect", "feudal", "first_election", "elections_won_previously", "elections_cont_previously",
+##                   "cab_after_elec", "cabinet_position" ,"swiched_btw_sec_nonsec")
 
-table6_ttest <- t.test(sect ~ secular_party, data = data)
+## table6_ttest <- t.test(sect ~ secular_party, data = data)
 
-library(knitr)
-table6_df <- data %>%
-  group_by(secular_party) %>%
-  summarise_at(to_summarize, list(mean = mean, std = sd))
+## library(knitr)
+## table6_df <- data %>%
+##   group_by(secular_party) %>%
+##   summarise_at(to_summarize, list(mean = mean, std = sd))
 
 ## Fig 1: Parties
 data <- read_dta("dalp_expert_evaluations.dta") %>%

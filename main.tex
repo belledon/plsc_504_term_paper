@@ -7,10 +7,11 @@
 \usepackage{subcaption}
 \usepackage{csquotes}
 \usepackage{hyperref}
+\usepackage{amsmath}
 
 
 \title{PLSC 504: Replication Term Paper}
-\subtitle{Secular Party Rule and Religous Violence in Pakistan}
+\subtitle{Secular Party Rule and Religious Violence in Pakistan}
 \author{Mario Belledonne}
 \date{\today}
 
@@ -23,74 +24,200 @@
 
 \section{Theory}
 
-Do terrorists cause violence in response to secular incumbency or does secular incumbency occur in response to terrorist violence. 
+Do terrorists cause violence in response to secular incumbency or does secular incumbency occur in response to terrorist violence?
 
 The period of $1998 \rightarrow 2003$ in Pakistan offers a "natural experiment" due to a plurality of first-past-the-post elections where both Islamist and secular leaders compete. 
-These elections determine the Members of the National Assembly (MNA). Members of the MNA are responsible for implementing local policies at the behest of their constituency and have also been known to collaborate with other local officials, notebly police, in order to fullfill these goals. 
+These elections determine the Members of the National Assembly (MNA). The MNA are responsible for implementing local policies at the behest of their constituency and have also been known to collaborate with other local officials, notably police, in order to fulfill these goals. 
 
-\subsection{DAG}
+The authors claim that the proportion of secular victories within a MNA district can influence violence directly (via policy) or indirectly by interactions with local officials (the police). 
 
+For both mechanisms, the authors claim that provincial and temporal fixed effects may be present. These are described in more detail in \ref{identification}.
 
-Fig1 illustrates the causal model used in the following sections. 
+\ref{figure:id-dag} illustrates the causal model used in the following sections.
 
-The proportion of secular candidates within the MNA for a particular district can influence violence either directly (via policy) or by interactions with local officials (the police). 
-In addition both provincial and temporal fixed effects may be present
 \section{Design}
 
-\subsection{Identification}
+\subsection{Identification} \label{identification}
 
 \subsubsection{The Outcome Variable}
 
-The authors used reports from the BFRS Political Violence in Pakistan Dataset. This dataset tallied reports of political violence from a daily English-language newspaper, \textit{Dawn}. The geo-political units of these reports are in terms of administrative districts. This immediately posses a challege to identification since administrative units do not correspond in a one-to-one fashion to constituencies and have re-organized over time.
+The authors used reports from the BFRS Political Violence in Pakistan Dataset. This dataset tallied reports of political violence from a daily English-language newspaper, \textit{Dawn}. The geo-political units of these reports are in terms of administrative districts. This immediately posses a challenge to identification since administrative units do not correspond in a one-to-one fashion to constituencies and have re-organized over time.
 
-The authors define a novel geo-political unit of analysis to overcome the discrepancy between districts and consituencies: the \textit{joined-district}. 
+The authors define a novel geo-political unit of analysis to overcome the discrepancy between districts and constituencies: the \textit{joined-district}. 
 This is defined as:
 \begin{displayquote}
 ...the smallest amalgamation of districts that encompasses complete MNA constituencies. 
 \end{displayquote}
 
+The $Y_{i,t}$ thus describes the level of religious violence for a particular joined-district $i$ at election year $t$. The authors use a variety of outcomes for religious violence described below. 
+
+\begin{enumerate}
+\item Any Event: A binary variable that is \textit{True} if any form of religious violence occured during the MNA's time in office for that district
+\item Any Killed: Similar to \textit{Any Event} but referring to any deaths
+\item Event Count: The number of religious-violent events
+\item Number Killed: The number of deaths caused by religious violence
+\item Number of days: The number of days in which at least one instance of religious violence occured.
+\end{enumerate}
+
 To capture the time varying nature of administrative districts (and thus the relevance the joint-district unit), the authors included a second unit, the \textit{cluster district} that is define as follows:
 
 \begin{displayquote}
-the smallest amalgamation of districts that contain complete MNA constituencies that did not geographically change from $1998 - 2013$.
+  the smallest amalgamation of districts that contain complete MNA constituencies that did not geographically change from $1998 - 2013$.
 \end{displayquote}
 
 These cluster districts where used in calculating clustered standard errors.
 
 \subsubsection{Treatment}
 
+The authors define treatment as
+
+\begin{displayquote}
+... the proportion of joined-district MNA seats
+  won by secular party candidates ...
+\end{displayquote}
+
+
 \subsubsection{Covariates}
 
 \subsection{Fuzzy RD as IV}
 
+\begin{equation} \label{eq:1}
+  Y_{i,t} = \alpha + \beta * D_{i,t} + \epsilon_{i,t}
+\end{equation}
+
+Where, $D_{i,t}$ is the treatment and $\epsilon_{i,t}$ describes error.\\
+
+The authors note in \ref{eq:1} that there may be an issue of reverse causality with this estimator. Namely, that violence in a previous period could effect the outcome and treatment for the subsequent period.
+To this effect, the authors claim to define period of exogenous variation within close elections between secular and Islamist candidates.
+
+Thus they define a two stage estimation strategy as follows:
+
+
+\begin{equation} \label{eq:2}
+  \widehat{D_{i,t}} = \mu + \lambda * Z_{i,t} + \kappa*D_{i,t} + \theta_p + v_{i,t}
+\end{equation}
+
+\begin{equation} \label{eq:3}
+  Y_{i,t} = \alpha + \beta * \widehat{D_{i,t}} + \gamma*D_{i,t} + \theta_{p} + \epsilon_{i,t}
+\end{equation}
+
+Where
+
+\begin{itemize}
+\item $Z_{i,t}$ describes the proportion of MNA seats won by secular candidates when in close competition with Islamist candidates (within $\pm 3\%$).
+\item $\widehat{D_{i,t}}$ is the predicted proportion of MNA seats won by secular candidates across all races in that district.
+\item $\theta_p$ describes a geo-spatial fixed effect of violence reporting at the province level. 
+\end{itemize}
+
+Here \ref{eq:2} refers to the first stage and \ref{eq:3} refers to the estimator of the \texttt{ATE} localized to close races between secular and Islamist MNA elections.  
+
+\begin{figure}[h]
+  \centering
+  \scalebox{0.5}{
+    \includegraphics{replication/dag.png}
+  }
+  \caption{DAG for Fuzzy RD Identification}
+  \label{fig:iv-dag}
+\end{figure}
+
+In sum the authors' assumptions are described in Fig \ref{fig:iv-dag}
 
 \section{Results}
 
 \subsection{Main Effect}
 
-This section outlines the main results reported by the authors. 
-
-\subsubsection{Placebo Check}
-
-\input{replication/table1.tex}
-
-I was able to reproduce the authors' estimates using the \texttt{estimatr::iv\_robust} method in \texttt{R} \ref{table:table1}. However, there is a discrepancy in the calculations of standard error and thus reported significance values. This could be do to the authors not using robust standard error calculation. 
-
-
 \subsubsection{IV Estimates of Main Effect}
 
-As in above, I was able to reproduce the estimated effect with discrepancies in the standard errors. That being said, the negative effect of proportion of secular victories on whether a joined-district had any event of religious violence and the number of religious violent events survived this replication \ref{table:table2}. 
+\begin{table}[ht]
+  \begin{center}
+    \scalebox{0.75}{
+      \input{replication/table2.tex}
+    }
+    \caption{Instrumental Variable Results}
+    \label{table:2}
+  \end{center}
+\end{table}
 
-\begin{center}
-\footnotesize \input{replication/table2.tex}
-\end{center}{}
-\begin{center}
-\footnotesize \input{replication/table3.tex}
-\end{center}{}
-\begin{center}
-\footnotesize \input{replication/table4.tex}
-\end{center}{}
+I was able to reproduce the estimated \texttt{ATE} with discrepancies in the standard errors using the \texttt{estimatr::iv\_robust} method in \texttt{R}.
+That being said, the negative effect of proportion of secular victories on whether a joined-district had any event of religious violence and the number of religious violent events survived this replication table \ref{table:2}.
+
+A potential explanation for the difference in SEs could be do to the authors not using robust standard error calculation. (will look into this more).
+
+
+\subsection{Difference in Means}
+
+\begin{table}[ht]
+  \begin{center}
+    \scalebox{0.75}{
+      \input{replication/table3.tex}
+    }
+    \caption{Difference in Means Estimate}
+    \label{table:3}
+  \end{center}
+\end{table}
+
+In an effort to appeal to the strength of their data and design, the authors attempt to estimate the \texttt{ATE} using the difference-in-means estimator (table \ref{table:3}).
+To this end, the authors restrict the dataset to 59 years and joined-district points where there was a single close election between secular and Islamist candidates.
+
+Again, the estimated effects match the original but due to a difference in SEs, none of the estimates survived replication. In the original, the authors report a significant effect for \textit{Any Event, Event Count, Number days}.
+
+%% \begin{center}
+%% \footnotesize \input{replication/table3.tex}
+%% \end{center}{}
+%% \begin{center}
+%% \footnotesize \input{replication/table4.tex}
+%% \end{center}{}
 \subsection{Robustness and Balance Checks}
+
+\subsubsection{Reverse Causality for Treatment and Instrument}
+
+\begin{table}[ht]
+  \begin{center}
+    \scalebox{0.75}{
+      \input{replication/table1.tex}
+    }
+    \caption{Placebo Check — Can Secular Victory in Close Elections at Time t Predict Prior Violence}
+    \label{table:1}
+  \end{center}
+\end{table}
+
+In order to address the potential influence of reverse causality, the authors attempted to predict the previous outcome for a given joined-district $Y_{i,t-1}$.
+I was able to reproduce the authors' null result \ref{table:1}.
+
+\begin{table}[ht]
+  \begin{center}
+    \scalebox{0.75}{
+      \input{replication/table4.tex}
+    }
+    \caption{Correlation Between Close Secular/Nonsecular Elections and Violence at Time t-1}
+    \label{table:4}
+  \end{center}
+\end{table}
+
+The authors also computed the predictive capacity of the instrument for lagged violence.
+These results are reported in table \ref{table:4} which replicate the source.
+Both with and without time and provincial fixed effects, the instrument is able to predict a lower level of religious violence.
+
+The authors claim that this limits the external validity of their main effect. I would argue that this also damages the internal validity as the instrument is shown to be likely endogenous and this the IV 2SLS estimate is likely to be biased. 
+
+
+\subsection{Mechanisms}
+
+The later section of the source, the authors perform explanatory analysis to illustrate potential mechanisms of secular MNA seats on religious violence. One explored avenue was the electoral accountability. The authors claim that secular leaders often include diminished religious violence as a campaign promise. The authors then predict that secular MNA candidates expect to suffer in future elections if religious violence does occur during their tenure. 
+
+To test their prediction, the authors estimate the causal effect of religious violence in the previous term on the proportion of secular MNA seats in the following election.
+I was able to reproduce these estimates in full (table \ref{table:5})
+
+\begin{table}[ht]
+  \begin{center}
+    \scalebox{0.75}{
+      \input{replication/table5.tex}
+    }
+    \caption{Mechanisms - Electoral Incentives}
+    \label{table:5}
+  \end{center}
+\end{table}
+
 
 \section{Future work}
 
@@ -104,7 +231,7 @@ In addition, the authors investigate the specificity of the effect of secular vi
 
 \subsection{Mechanisms of Main Effect}
 
-The authors illustrate potential mechanisms for their main finding (the reduction of religious violence due to secular victories). These include electoral incentives (in terms of voter accountability if religious violence does arrise in the presence of a secular district), politician characteristics, state capacity (concentration of police force in secular districts).
+The authors illustrate potential mechanisms for their main finding (the reduction of religious violence due to secular victories). These include electoral incentives (in terms of voter accountability if religious violence does arise in the presence of a secular district), politician characteristics, state capacity (concentration of police force in secular districts).
 
 \section{Conclusion}
 

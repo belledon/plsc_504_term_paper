@@ -31,8 +31,8 @@ texreg(placebo_test,
        digits = 3,
        caption = "Placebo Check — Can Secular Victory in Close Elections at Time t Predict Prior Violence",
        custom.note = "Robust SEs clustered by cluster-district area, in brackets",
-       table = TRUE,
-       scalebox = 0.5
+       table = FALSE,
+       scalebox = 0.75
 )
 ## replicate table 2 - ITT estimates
 dependent_vars <- c("any_violence", "ln_eventcount", "any_killed", "ln_numberkilled",
@@ -48,7 +48,8 @@ texreg(itt_results,
        custom.model.names = c("Any Event", "Event Count", "Any Killed", "Number Killed", "Number Days"),
        digits = 3,
        caption = "TABLE 2. Instrumental Variable Results",
-       custom.note = "Robust SEs clustered by cluster-district area, in brackets"
+       custom.note = "Robust SEs clustered by cluster-district area, in brackets",
+       table = FALSE
        )
 
 
@@ -71,7 +72,8 @@ texreg(dim_results,
        custom.model.names = c("Any Event", "Event Count", "Any Killed", "Number Killed", "Number Days"),
        digits = 3,
        caption = "TABLE 3. Instrumental Variable Results",
-       custom.note = "Robust SEs clustered by cluster-district area, in brackets"
+       custom.note = "Robust SEs clustered by cluster-district area, in brackets",
+       table = FALSE
        )
 
 ## replicate table 4
@@ -96,7 +98,8 @@ texreg(list(lag_killed1, lag_killed2, lag_killed3),
        custom.model.names = c("No Fixed Effects", "Disctrict Cluster FE", "Disctrict Cluster + Province-Year FEs"),
        digits = 3,
        caption = "TABLE 4. Correlation Between Close Secular/Nonsecular Elections and Violence at Time t-1",
-       custom.note = "Robust SEs clustered by cluster-district area, in brackets"
+       custom.note = "Robust SEs clustered by cluster-district area, in brackets",
+       table = FALSE
 )
 
 # Probably need to use GLM.nb
@@ -151,7 +154,8 @@ texreg(list(mech1, mech2, mech3, mech4),
        custom.model.names = c("", "", "", ""),
        digits = 3,
        caption = "TABLE 5. Mechanisms - Electoral Incentives",
-       custom.note = "Robust SEs clustered by cluster-district area, in brackets"
+       custom.note = "Robust SEs clustered by cluster-district area, in brackets",
+       table = FALSE
        )
 
 ## Table 6, secular/ non-secular candidate differences

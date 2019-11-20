@@ -1,0 +1,83 @@
+\documentclass{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{listings}
+\usepackage{minted}
+\usepackage{subcaption}
+\usepackage{csquotes}
+
+
+
+\title{PLSC 504: Replication Term Paper}
+\subtitle{Secular Party Rule and Religous Violence in Pakistan}
+\author{Mario Belledonne}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+
+\section{Theory}
+
+Do terrorists cause violence in response to secular incumbency or does secular incumbency occur in response to terrorist violence. 
+
+The period of $1998 \rightarrow 2003$ in Pakistan offers a "natural experiment" due to a plurality of first-past-the-post elections where both Islamist and secular leaders compete. 
+These elections determine the Members of the National Assembly (MNA). Members of the MNA are responsible for implementing local policies at the behest of their constituency and have also been known to collaborate with other local officials, notebly police, in order to fullfill these goals. 
+
+\subsection{DAG}
+
+
+Fig1 illustrates the causal model used in the following sections. 
+
+The proportion of secular candidates within the MNA for a particular district can influence violence either directly (via policy) or by interactions with local officials (the police). 
+In addition both provincial and temporal fixed effects may be present
+\section{Design}
+
+\subsection{Identification}
+
+\subsubsection{The Outcome Variable}
+
+The authors used reports from the BFRS Political Violence in Pakistan Dataset. This dataset tallied reports of political violence from a daily English-language newspaper, \textit{Dawn}. The geo-political units of these reports are in terms of administrative districts. This immediately posses a challege to identification since administrative units do not correspond in a one-to-one fashion to constituencies and have re-organized over time.
+
+The authors define a novel geo-political unit of analysis to overcome the discrepancy between districts and consituencies: the \textit{joined-district}. 
+This is defined as:
+\begin{displayquote}
+...the smallest amalgamation of districts that encompasses complete MNA constituencies. 
+\end{displayquote}
+
+To capture the time varying nature of administrative districts (and thus the relevance the joint-district unit), the authors included a second unit, the \textit{cluster district} that is define as follows:
+
+\begin{displayquote}
+the smallest amalgamation of districts that contain complete MNA constituencies that did not geographically change from $1998 - 2013$.
+\end{displayquote}
+
+These cluster districts where used in calculating clustered standard errors.
+
+\subsubsection{Treatment}
+
+\subsubsection{Covariates}
+
+\subsection{Fuzzy RD as IV}
+
+
+\section{Results}
+
+\subsection{Main Effect}
+\include{replication/table1.tex}
+\include{replication/table2.tex}
+\include{replication/table3.tex}
+\include{replication/table4.tex}
+\include{replication/table5.tex}
+
+\subsection{Robustness and Balance Checks}
+
+\section{Conclusion}
+
+\bibliography{main}
+\bibliographystyle{plain}
+
+\end{document}

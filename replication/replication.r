@@ -2,6 +2,7 @@ library(tidyverse)
 library(haven)
 library(estimatr)
 library(texreg)
+library(rddensity)
 
 data <- read_dta("final_dataset.dta")
 
@@ -88,17 +89,17 @@ texreg(list(lag_killed1, lag_killed2, lag_killed3),
        custom.coef.map = list(secular_close_race = "Secularist Close Race"),
        custom.model.names = c("No Fixed Effects", "Disctrict Cluster FE", "Disctrict Cluster + Province-Year FEs"),
        digits = 3,
-       caption = "TABLE 3. Instrumental Variable Results",
+       caption = "TABLE 4. Correlation Between Close Secular/Nonsecular Elections and Violence at Time t-1",
        custom.note = "Robust SEs clustered by cluster-district area, in brackets"
 )
 
 # Probably need to use GLM.nb
 lag_any1 <- with(data, lm_robust(lagged_eventcount ~ secular_close_race, clusters = cluster_var)) %>%
   extract.lm_robust()
-lag_any2 <- with(data, lm_robust(lagged_eventcount ~ secular_close_race + factor(cluster_var), 
+lag_any2 <- with(data, lm_robust(lagged_eventcount ~ secular_close_race + factor(cluster_var),
                                     clusters = cluster_var)) %>%
   extract.lm_robust()
-lag_any3 <- with(data, lm_robust(lagged_eventcount ~ secular_close_race + factor(cluster_var) + factor(province_year), 
+lag_any3 <- with(data, lm_robust(lagged_eventcount ~ secular_close_race + factor(cluster_var) + factor(province_year),
                                     clusters = cluster_var)) %>%
   extract.lm_robust()
 
@@ -109,28 +110,42 @@ lag_any3 <- with(data, lm_robust(lagged_eventcount ~ secular_close_race + factor
 mech_data <- data %>%
   filter(year != 1988)
 
-mech1 <- with(mech_data, 
-              lm_robust(secular_vote_prop_current ~ interaction + any_event_6m_neg1 + prop_secular_incumbent_tmin1 + factor(cluster_var), 
-                    clusters = cluster_var)) %>% 
-  tidy()
+mech1 <- with(mech_data,
+              lm_robust(secular_vote_prop_current ~ interaction + any_event_6m_neg1 + prop_secular_incumbent_tmin1 + factor(cluster_var),
+                    clusters = cluster_var)) %>%
+  extract.lm_robust()
 
 #  reg secular_vote_prop_current interaction2 ln_eventcount_6m_neg1_placebo prop_secular_incumbent_tmin1 i.cluster_var if (year !=1988), cl(cluster_var)
-mech2 <- with(mech_data, 
-              lm_robust(secular_vote_prop_current ~ interaction2 + ln_eventcount_6m_neg1_placebo + prop_secular_incumbent_tmin1 + factor(cluster_var), 
-                        clusters = cluster_var)) %>% 
-  tidy()
+mech2 <- with(mech_data,
+              lm_robust(secular_vote_prop_current ~ interaction2 + ln_eventcount_6m_neg1_placebo + prop_secular_incumbent_tmin1 + factor(cluster_var),
+                        clusters = cluster_var)) %>%
+  extract.lm_robust()
 # reg secular_vote_prop_current interaction any_event_6m_neg1 prop_secular_incumbent_tmin1 i.cluster_var i.province_year if (year !=1988), cl(cluster_var)
-mech3 <- with(mech_data, 
-              lm_robust(secular_vote_prop_current ~ interaction + any_event_6m_neg1 + prop_secular_incumbent_tmin1 + factor(cluster_var) + factor(province_year), 
-                        clusters = cluster_var)) %>% 
-  tidy()
+mech3 <- with(mech_data,
+              lm_robust(secular_vote_prop_current ~ interaction + any_event_6m_neg1 + prop_secular_incumbent_tmin1 + factor(cluster_var) + factor(province_year),
+                        clusters = cluster_var)) %>%
+  extract.lm_robust()
 
 # reg secular_vote_prop_current interaction2 ln_eventcount_6m_neg1_placebo prop_secular_incumbent_tmin1 i.cluster_var i.province_year if (year !=1988), cl(cluster_var)
-mech4 <- with(mech_data, 
-              lm_robust(secular_vote_prop_current ~ interaction2 + ln_eventcount_6m_neg1_placebo + prop_secular_incumbent_tmin1 + factor(cluster_var) + factor(province_year), 
-                        clusters = cluster_var)) %>% 
-  tidy()
+mech4 <- with(mech_data,
+              lm_robust(secular_vote_prop_current ~ interaction2 + ln_eventcount_6m_neg1_placebo + prop_secular_incumbent_tmin1 + factor(cluster_var) + factor(province_year),
+                        clusters = cluster_var)) %>%
+  extract.lm_robust()
 
+texreg(list(mech1, mech2, mech3, mech4),
+       file = "table5.tex",
+       stars = c(0.01, 0.05, 0.1),
+       custom.coef.map = list(secular_vote_prop_current = "Secular Party Vote Share",
+                              interaction = "Prop. Secular (t-1) x Any violence",
+                              interaction2 = "Prop. Secular (t-1) x Event count (ln)",
+                              any_event_6m_neg1 = "Any violence",
+                              prop_secular_incumbent_tmin1 = "Prop. secularist wins (t - 1)",
+                              ln_eventcount_6m_neg1_placebo = "Event count"),
+       custom.model.names = c("", "", "", ""),
+       digits = 3,
+       caption = "TABLE 5. Mechanisms - Electoral Incentives",
+       custom.note = "Robust SEs clustered by cluster-district area, in brackets"
+       )
 
 ## Table 6, secular/ non-secular candidate differences
 
@@ -139,6 +154,38 @@ data <- read_dta("mna_close_elections_final.dta")
 to_summarize <- c("sect", "feudal", "first_election", "elections_won_previously", "elections_cont_previously",
                   "cab_after_elec", "cabinet_position" ,"swiched_btw_sec_nonsec")
 
+table6_ttest <- t.test(sect ~ secular_party, data = data)
+
+library(knitr)
 table6_df <- data %>%
   group_by(secular_party) %>%
   summarise_at(to_summarize, list(mean = mean, std = sd))
+
+## Fig 1: Parties
+data <- read_dta("dalp_expert_evaluations.dta") %>%
+  mutate(d4bin = d4bin == 1)
+
+png("fig_1.png", width = 800, height = 600)
+data %>%
+  ggplot() +
+  geom_histogram(aes(d4bin)) +
+  facet_grid(partyorder ~ .) +
+  theme_bw()
+dev.off()
+
+
+## Fig A4 Density Test
+
+data <- read_dta("mccrary.dta")
+dens_test <- rddensity(data$secular_mov)
+png("fig_a4.png", width = 800, height = 600)
+data %>%
+  ggplot(aes(x = secular_mov)) +
+  stat_density() +
+  geom_vline(xintercept = 0) +
+  ggtitle("Running Variable Density") +
+  xlab("Secular party margin of victory/loss") +
+  ylab("Density") +
+  xlim(-1, 1) +
+  theme_bw()
+dev.off()

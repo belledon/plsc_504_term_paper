@@ -28,8 +28,9 @@ texreg(placebo_test,
                               secular_close_race = "Prop. Secular Clost Race"),
        custom.model.names = c("Any Event", "Event Count", "Any Killed", "Number Killed", "Number Days"),
        digits = 3,
-       caption = "TABLE 1. Placebo Check—Can Secular Victory in Close Elections at Time t Predict Prior Violence (t − 1)?",
-       custom.note = "Robust SEs clustered by cluster-district area, in brackets"
+       caption = "Placebo Check — Can Secular Victory in Close Elections at Time t Predict Prior Violence",
+       custom.note = "Robust SEs clustered by cluster-district area, in brackets",
+       table = FALSE
 )
 ## replicate table 2 - ITT estimates
 dependent_vars <- c("any_violence", "ln_eventcount", "any_killed", "ln_numberkilled",

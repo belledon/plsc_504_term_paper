@@ -6,7 +6,7 @@
 \usepackage{minted}
 \usepackage{subcaption}
 \usepackage{csquotes}
-
+\usepackage{hyperref}
 
 
 \title{PLSC 504: Replication Term Paper}
@@ -67,10 +67,44 @@ These cluster districts where used in calculating clustered standard errors.
 \section{Results}
 
 \subsection{Main Effect}
-//
-    \input{replication/table1.tex}
 
+This section outlines the main results reported by the authors. 
+
+\subsubsection{Placebo Check}
+
+\input{replication/table1.tex}
+
+I was able to reproduce the authors' estimates using the \texttt{estimatr::iv\_robust} method in \texttt{R} \ref{table:table1}. However, there is a discrepancy in the calculations of standard error and thus reported significance values. This could be do to the authors not using robust standard error calculation. 
+
+
+\subsubsection{IV Estimates of Main Effect}
+
+As in above, I was able to reproduce the estimated effect with discrepancies in the standard errors. That being said, the negative effect of proportion of secular victories on whether a joined-district had any event of religious violence and the number of religious violent events survived this replication \ref{table:table2}. 
+
+\begin{center}
+\footnotesize \input{replication/table2.tex}
+\end{center}{}
+\begin{center}
+\footnotesize \input{replication/table3.tex}
+\end{center}{}
+\begin{center}
+\footnotesize \input{replication/table4.tex}
+\end{center}{}
 \subsection{Robustness and Balance Checks}
+
+\section{Future work}
+
+\subsection{Robustness Checks of Main Effect}
+
+The authors conduct extensive checks on the implications of their design, including first stage (shown to be weak) and bandwidth sensitivity. 
+
+Issues with the weak instrumental variable non-withstanding, I plan to revisit their bandwidth sensitivity analysis using the \texttt{rdrobust} package to verify that their main effect still holds under MSE-optimal bandwidths.
+
+In addition, the authors investigate the specificity of the effect of secular victories on religious violence to see if secular victories reduce violence in general. 
+
+\subsection{Mechanisms of Main Effect}
+
+The authors illustrate potential mechanisms for their main finding (the reduction of religious violence due to secular victories). These include electoral incentives (in terms of voter accountability if religious violence does arrise in the presence of a secular district), politician characteristics, state capacity (concentration of police force in secular districts).
 
 \section{Conclusion}
 

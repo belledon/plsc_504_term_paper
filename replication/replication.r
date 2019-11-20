@@ -30,7 +30,8 @@ texreg(placebo_test,
        digits = 3,
        caption = "Placebo Check — Can Secular Victory in Close Elections at Time t Predict Prior Violence",
        custom.note = "Robust SEs clustered by cluster-district area, in brackets",
-       table = FALSE
+       table = TRUE,
+       scalebox = 0.5
 )
 ## replicate table 2 - ITT estimates
 dependent_vars <- c("any_violence", "ln_eventcount", "any_killed", "ln_numberkilled",

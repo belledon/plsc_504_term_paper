@@ -4,8 +4,9 @@ library(estimatr)
 library(texreg)
 library(rddensity)
 
-data <- read_dta("final_dataset.dta")
+## Replicates Tables 1-6
 
+data <- read_dta("final_dataset.dta")
 
 ## replicate table 1 - Placebos on lag variables
 placebo_dependent_vars <- c("any_lagged_violence", "ln_lagged_eventcount", "any_lagged_killed",
@@ -184,19 +185,3 @@ data %>%
   theme_bw()
 dev.off()
 
-
-## Fig A4 Density Test
-
-data <- read_dta("mccrary.dta")
-dens_test <- rddensity(data$secular_mov)
-png("fig_a4.png", width = 800, height = 600)
-data %>%
-  ggplot(aes(x = secular_mov)) +
-  stat_density() +
-  geom_vline(xintercept = 0) +
-  ggtitle("Running Variable Density") +
-  xlab("Secular party margin of victory/loss") +
-  ylab("Density") +
-  xlim(-1, 1) +
-  theme_bw()
-dev.off()

@@ -9,10 +9,12 @@ library(rdrobust)
 data <- read_dta("final_dataset.dta") %>%
   ## Filter and clean data
   filter_at(vars(any_violence, secular_win, secular_close_race),
-            all_vars(!is.na(.)))
+            all_vars(!is.na(.))) %>%
+  # for exploration, only consider relevant rows
+  select(joined_district, year, totalsecularvotes_current, valid_current, no_seats, secular_win, 
+         secular_close_race, no_secular_close_race, margin_of_victory)
 
-fit <- rdrobust(data$any_violence, data$secular_close_race, 
-                fuzzy = data$secular_win,
+fit <- rdrobust(data$any_violence, data$secular_close_race,
                 c = 0.5)
 
 

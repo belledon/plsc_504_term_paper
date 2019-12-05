@@ -2,7 +2,6 @@ library(tidyverse)
 library(haven)
 library(estimatr)
 library(texreg)
-library(rddensity)
 
 ## Replicates Tables 1-6
 
@@ -18,7 +17,7 @@ run_iv <- function(dep_var, right_hand) {
   fit <- with(data, iv_robust(as.formula(form_str), clusters = cluster_var))
   ret <- extract.iv_robust(fit)
 }
-righthand <- "secular_win + secular_close_race + factor(province) | secular_close_win + secular_close_race + factor(province)"
+righthand <- "secular_win  + factor(province) | secular_close_win + secular_close_race + factor(province)"
 
 placebo_test <- lapply(placebo_dependent_vars, function(d) run_iv(d, righthand))
 

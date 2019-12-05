@@ -8,7 +8,9 @@
 \usepackage{csquotes}
 \usepackage{hyperref}
 \usepackage{amsmath}
+\usepackage{biblatex}
 
+\addbibresource{main.bib}
 
 \title{PLSC 504: Replication Term Paper}
 \subtitle{Secular Party Rule and Religious Violence in Pakistan}
@@ -31,9 +33,9 @@ These elections determine the Members of the National Assembly (MNA). The MNA ar
 
 The authors claim that the proportion of secular victories within a MNA district can influence violence directly (via policy) or indirectly by interactions with local officials (the police). 
 
-For both mechanisms, the authors claim that provincial and temporal fixed effects may be present. These are described in more detail in \ref{identification}.
+For both mechanisms, the authors claim that the province and election year will change the effect of secular politics on religious violence. These are described in more detail in \ref{identification}.
 
-\ref{figure:id-dag} illustrates the causal model used in the following sections.
+\ref{figure:iv-dag} illustrates the causal model used in the following sections.
 
 \section{Design}
 
@@ -114,7 +116,7 @@ Here \ref{eq:2} refers to the first stage and \ref{eq:3} refers to the estimator
 \begin{figure}[h]
   \centering
   \scalebox{0.5}{
-    \includegraphics{replication/dag.png}
+    \includegraphics{replication/output/dag.png}
   }
   \caption{DAG for Fuzzy RD Identification}
   \label{fig:iv-dag}
@@ -131,7 +133,7 @@ In sum the authors' assumptions are described in Fig \ref{fig:iv-dag}
 \begin{table}[ht]
   \begin{center}
     \scalebox{0.75}{
-      \input{replication/table2.tex}
+      \input{replication/output/table2.tex}
     }
     \caption{Instrumental Variable Results}
     \label{table:2}
@@ -144,12 +146,27 @@ That being said, the negative effect of proportion of secular victories on wheth
 A potential explanation for the difference in SEs could be do to the authors not using robust standard error calculation. (will look into this more).
 
 
+\begin{figure}[h]
+  \centering
+  \scalebox{0.5}{
+    \includegraphics{replication/output/fig_a4.png}
+  }
+  \caption{McCrary Test of Running Variable}
+  \label{fig:mccrary-test}
+\end{figure}
+
+A core assumption of regression discontinuity requires positivity, or the continuous nature of the conditional expecation functions for the potentation outcomes (cite).
+In \ref{fig:mccrary-test}, I replicate the negative result of the McCrary test on the running variable (the secular party margin of victory).
+While a negative result does not fully affirm the positivity assumption, a positive result fully rejects it \cite{mccrary:2008}.
+
+
+
 \subsection{Difference in Means}
 
 \begin{table}[ht]
   \begin{center}
     \scalebox{0.75}{
-      \input{replication/table3.tex}
+      \input{replication/output/table3.tex}
     }
     \caption{Difference in Means Estimate}
     \label{table:3}
@@ -162,10 +179,10 @@ To this end, the authors restrict the dataset to 59 years and joined-district po
 Again, the estimated effects match the original but due to a difference in SEs, none of the estimates survived replication. In the original, the authors report a significant effect for \textit{Any Event, Event Count, Number days}.
 
 %% \begin{center}
-%% \footnotesize \input{replication/table3.tex}
+%% \footnotesize \input{replication/output/table3.tex}
 %% \end{center}{}
 %% \begin{center}
-%% \footnotesize \input{replication/table4.tex}
+%% \footnotesize \input{replication/output/table4.tex}
 %% \end{center}{}
 \subsection{Robustness and Balance Checks}
 
@@ -174,7 +191,7 @@ Again, the estimated effects match the original but due to a difference in SEs, 
 \begin{table}[ht]
   \begin{center}
     \scalebox{0.75}{
-      \input{replication/table1.tex}
+      \input{replication/output/table1.tex}
     }
     \caption{Placebo Check — Can Secular Victory in Close Elections at Time t Predict Prior Violence}
     \label{table:1}
@@ -187,7 +204,7 @@ I was able to reproduce the authors' null result \ref{table:1}.
 \begin{table}[ht]
   \begin{center}
     \scalebox{0.75}{
-      \input{replication/table4.tex}
+      \input{replication/output/table4.tex}
     }
     \caption{Correlation Between Close Secular/Nonsecular Elections and Violence at Time t-1}
     \label{table:4}
@@ -211,7 +228,7 @@ I was able to reproduce these estimates in full (table \ref{table:5})
 \begin{table}[ht]
   \begin{center}
     \scalebox{0.75}{
-      \input{replication/table5.tex}
+      \input{replication/output/table5.tex}
     }
     \caption{Mechanisms - Electoral Incentives}
     \label{table:5}
@@ -235,7 +252,5 @@ The authors illustrate potential mechanisms for their main finding (the reductio
 
 \section{Conclusion}
 
-\bibliography{main}
-\bibliographystyle{plain}
 
 \end{document}

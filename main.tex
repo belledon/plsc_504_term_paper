@@ -23,35 +23,32 @@
 
 \section{Introduction}
 
-
-\section{Theory}
-
 Do terrorists cause violence in response to secular incumbency or does secular incumbency occur in response to terrorist violence?
 
-The period of $1998 \rightarrow 2003$ in Pakistan offers a "natural experiment" due to a plurality of first-past-the-post elections where both Islamist and secular leaders compete. 
-These elections determine the Members of the National Assembly (MNA). The MNA are responsible for implementing local policies at the behest of their constituency and have also been known to collaborate with other local officials, notably police, in order to fulfill these goals. 
+The period of $1998 \rightarrow 2003$ in Pakistan offers a "natural experiment" due to a plurality of first-past-the-post elections where both Islamist and secular leaders competed for local elections.
+These elections determine the Members of the National Assembly (MNA), who are responsible for implementing local policies at the behest of their constituency.
+The authors claim that secular victories within a MNA district attenuate violence at the district level, possibly moderated by police infrastructure. 
 
-The authors claim that the proportion of secular victories within a MNA district can influence violence directly (via policy) or indirectly by interactions with local officials (the police). 
+\section{Design} \label{design}
 
-For both mechanisms, the authors claim that the province and election year will change the effect of secular politics on religious violence. These are described in more detail in \ref{identification}.
 
-\ref{figure:iv-dag} illustrates the causal model used in the following sections.
+The authors aim to measure the effect of secular rule (\ref{treatment}) on violence (\ref{outcome}) in democratic elections.
 
-\section{Design}
-
-\subsection{Identification} \label{identification}
-
-\subsubsection{The Outcome Variable}
+\paragraph{Data} \label{data}
 
 The authors used reports from the BFRS Political Violence in Pakistan Dataset. This dataset tallied reports of political violence from a daily English-language newspaper, \textit{Dawn}. The geo-political units of these reports are in terms of administrative districts. This immediately posses a challenge to identification since administrative units do not correspond in a one-to-one fashion to constituencies and have re-organized over time.
 
 The authors define a novel geo-political unit of analysis to overcome the discrepancy between districts and constituencies: the \textit{joined-district}. 
 This is defined as:
 \begin{displayquote}
-...the smallest amalgamation of districts that encompasses complete MNA constituencies. 
+  ...the smallest amalgamation of districts that encompasses complete MNA constituencies. 
 \end{displayquote}
 
-The $Y_{i,t}$ thus describes the level of religious violence for a particular joined-district $i$ at election year $t$. The authors use a variety of outcomes for religious violence described below. 
+
+\paragraph{The Outcome Variable} \label{outcome}
+
+
+The authors use a variety of outcomes for religious violence for a particular joined-district $i$ at election $t$, $Y_{i,t}$.
 
 \begin{enumerate}
 \item Any Event: A binary variable that is \textit{True} if any form of religious violence occured during the MNA's time in office for that district
@@ -61,46 +58,99 @@ The $Y_{i,t}$ thus describes the level of religious violence for a particular jo
 \item Number of days: The number of days in which at least one instance of religious violence occured.
 \end{enumerate}
 
-To capture the time varying nature of administrative districts (and thus the relevance the joint-district unit), the authors included a second unit, the \textit{cluster district} that is define as follows:
 
-\begin{displayquote}
-  the smallest amalgamation of districts that contain complete MNA constituencies that did not geographically change from $1998 - 2013$.
-\end{displayquote}
-
-These cluster districts where used in calculating clustered standard errors.
-
-\subsubsection{Treatment}
+\paragraph{Treatment} \label{treatment}
 
 The authors define treatment as
-
 \begin{displayquote}
 ... the proportion of joined-district MNA seats
   won by secular party candidates ...
 \end{displayquote}
 
 
-\subsubsection{Covariates}
 
-\subsection{Fuzzy RD as IV}
+\subsection{Instrumental Variable Identification} \label{id}
 
+\paragraph{Difference in Means}
+
+\begin{figure}[h]
+  \centering
+  \scalebox{0.5}{
+    \includegraphics{replication/output/dags-ate_dim.png}
+  }
+  \caption{DIM Bias}
+  \label{fig:ate_dim}
+\end{figure}
+
+The bivariate Difference in Means (DIM) estimator for the ATE takes the following form: 
 \begin{equation} \label{eq:1}
   Y_{i,t} = \alpha + \beta * D_{i,t} + \epsilon_{i,t}
 \end{equation}
+Where, $D_{i,t}$ is the treatment and $\epsilon_{i,t}$ describes error.
 
-Where, $D_{i,t}$ is the treatment and $\epsilon_{i,t}$ describes error.\\
+The authors describe two potential sources of bias for DIM \ref{fig:ate_dim}:
 
-The authors note in \ref{eq:1} that there may be an issue of reverse causality with this estimator. Namely, that violence in a previous period could effect the outcome and treatment for the subsequent period.
-To this effect, the authors claim to define period of exogenous variation within close elections between secular and Islamist candidates.
+\begin{enumerate}
+\item Reverse causality/ interference: Does previous violence effect the current election?
+\item Unobserved confounders between treatment and outcome.
+\end{enumerate}
+
+\paragraph{Instrumental Variables} \label{iv}
+
+The authors resort to Instrumental Variables (IV) in order to isolate exogenous variance in treatment (cite IV).
+The authors postulate that races where the secular candidate wins by a narrow margin ($\leq 3 \%$), $Z_{i,t}$, identifies an as-if random assignment for treatment,($D_{i,t}$).
+In addition, the authors cite a potential backdoor for the instrument, the proportion of close races either won or lost by secular canditates by a close margin, $X_{i,t}$.
+By controlling for $X_{i,t}$, the authors hope to ensure the exogeneity of the instrument.
+
+An IV design follows five assuptions:
+
+\begin{enumerate}
+\item{Non-zero first stage: $D_{i,t} \not\!\perp\!\!\!\perp Z_{i,t}$}
+\item{Exclusion Restriction: $Y_{i,t} \perp Z_{i,t} \| D_{i,t}$}
+\item{Exogenous instrument}
+\item{Monotonicity}
+\item{Non-interference}
+\end{enumerate}
+
+The authors defend the non-zero first stage in table \ref{table:first_stage} by calculated the first-stage regression, eq \ref{eq:1}.
+Given the relationship between covariate $X_{i,t}$, the proportion of close races, and the instrument, the proportion of close races that secularists win, the authors claim that the exclusion restriction holds as the only logical path that $Z_{i,t}$ could effect religious violence in a joined-district must be the proportion of seats won by secular candidates.
+The authors rigorously defend the exogeneity of the instrument by ensuring that the instrument did not predict a variety of pre-treatment covariates including state capacity, agricultural production, census data (education, utilities), and voter participation. These results are replicated in \ref{exo}
+
+While the original work does not explicitly mentioned the assumption of monotonicity, the presence of defiers would be nearly impossible.
+For defiers to be present, a joined-district would have to nominate a losing candidate.
+This is incredibly illogical in an adversarial, first-past-the-post system.
+However, the authors note that corruption at the ballot counting office may lead to a just barely winning secularist candidate to nominated.
+To this end, the authors calculate a density test on the instrument (figure \ref{fig:density}).
+
+The Non-interference assumption is defended by a combination of lagged predictions in defending exogeneity \ref{exo} and the inclusion of the proportion of close races, $X_{i,t}$, and province-level fixed effects $\theta_p$.
+
+\paragraph{Fixed Effects}
+The original compilers (cite) of the BFRS dataset recommend using province level fixed effects, $\theta_p$ in order to control for regional differences in reporting behavior.
+However, the authors note that excluding FE did not change the main estimates. (TODO add figure in results)
+
+
+\begin{figure}[h]
+  \centering
+  \scalebox{0.5}{
+    \includegraphics{replication/output/dags-ate_iv.png}
+  }
+  \caption{DIM Bias}
+  \label{fig:ate_iv}
+\end{figure}
+
+In sum, figure \ref{fig:ate_iv} illustrates the model identifying the ATE.
+
+\paragraph{2SLS Estimation}
 
 Thus they define a two stage estimation strategy as follows:
 
 
 \begin{equation} \label{eq:2}
-  \widehat{D_{i,t}} = \mu + \lambda * Z_{i,t} + \kappa*D_{i,t} + \theta_p + v_{i,t}
+  \widehat{D_{i,t}} = \mu + \lambda * Z_{i,t} + \kappa*X_{i,t} + \theta_p + v_{i,t}
 \end{equation}
 
-\begin{equation} \label{eq:3}
-  Y_{i,t} = \alpha + \beta * \widehat{D_{i,t}} + \gamma*D_{i,t} + \theta_{p} + \epsilon_{i,t}
+ \begin{equation} \label{eq:3}
+  Y_{i,t} = \alpha + \beta * \widehat{D_{i,t}} + \gamma*X_{i,t} + \theta_{p} + \epsilon_{i,t}
 \end{equation}
 
 Where
@@ -113,81 +163,47 @@ Where
 
 Here \ref{eq:2} refers to the first stage and \ref{eq:3} refers to the estimator of the \texttt{ATE} localized to close races between secular and Islamist MNA elections.  
 
-\begin{figure}[h]
-  \centering
-  \scalebox{0.5}{
-    \includegraphics{replication/output/dag.png}
-  }
-  \caption{DAG for Fuzzy RD Identification}
-  \label{fig:iv-dag}
-\end{figure}
+\paragraph{Clustered Standard Errors}
 
-In sum the authors' assumptions are described in Fig \ref{fig:iv-dag}
+To capture the time varying geographic nature of administrative districts, the authors included a second unit, the \textit{cluster district} that is define as follows:
+
+\begin{displayquote}
+  the smallest amalgamation of districts that contain complete MNA constituencies that did not geographically change from $1998 - 2013$.
+\end{displayquote}
+
+These cluster districts where used in calculating clustered standard errors.
+
 
 \section{Results}
 
-\subsection{Main Effect}
+\subsection{Identification Checks}
 
-\subsubsection{IV Estimates of Main Effect}
-
-\begin{table}[ht]
-  \begin{center}
-    \scalebox{0.75}{
-      \input{replication/output/table2.tex}
-    }
-    \caption{Instrumental Variable Results}
-    \label{table:2}
-  \end{center}
-\end{table}
-
-I was able to reproduce the estimated \texttt{ATE} with discrepancies in the standard errors using the \texttt{estimatr::iv\_robust} method in \texttt{R}.
-That being said, the negative effect of proportion of secular victories on whether a joined-district had any event of religious violence and the number of religious violent events survived this replication table \ref{table:2}.
-
-A potential explanation for the difference in SEs could be do to the authors not using robust standard error calculation. (will look into this more).
-
-
-\begin{figure}[h]
-  \centering
-  \scalebox{0.5}{
-    \includegraphics{replication/output/fig_a4.png}
-  }
-  \caption{McCrary Test of Running Variable}
-  \label{fig:mccrary-test}
-\end{figure}
-
-A core assumption of regression discontinuity requires positivity, or the continuous nature of the conditional expecation functions for the potentation outcomes (cite).
-In \ref{fig:mccrary-test}, I replicate the negative result of the McCrary test on the running variable (the secular party margin of victory).
-While a negative result does not fully affirm the positivity assumption, a positive result fully rejects it \cite{mccrary:2008}.
-
-
-
-\subsection{Difference in Means}
+\paragraph{Non-zero First Stage}
 
 \begin{table}[ht]
   \begin{center}
-    \scalebox{0.75}{
-      \input{replication/output/table3.tex}
+    \scalebox{0.85}{
+      \input{replication/output/first_stage.tex}
     }
-    \caption{Difference in Means Estimate}
-    \label{table:3}
+    \caption{First Stage Regression}
+    \label{table:first_stage}
   \end{center}
 \end{table}
 
-In an effort to appeal to the strength of their data and design, the authors attempt to estimate the \texttt{ATE} using the difference-in-means estimator (table \ref{table:3}).
-To this end, the authors restrict the dataset to 59 years and joined-district points where there was a single close election between secular and Islamist candidates.
+A key component to an IV design is a non-zero first stage \ref{iv}. In other words, the exogenous instrument, $Z_{i,t}$ must have a statistically significant effect on treatment, $D_{i,t}$. Table \ref{table:first_stage} shows that the proportion of close wins by secular candidates has a strong effect on the proportion of secular wins by any margin (eq \ref{eq:2}).
 
-Again, the estimated effects match the original but due to a difference in SEs, none of the estimates survived replication. In the original, the authors report a significant effect for \textit{Any Event, Event Count, Number days}.
+\paragraph{Exclusion Restriction}
+\begin{table}[ht]
+  \begin{center}
+    \scalebox{0.725}{
+      \input{replication/output/exclusion_restriction.tex}
+    }
+    \caption{Exclusion Restriction}
+    \label{table:exclusion_restriction}
+  \end{center}
+\end{table}
 
-%% \begin{center}
-%% \footnotesize \input{replication/output/table3.tex}
-%% \end{center}{}
-%% \begin{center}
-%% \footnotesize \input{replication/output/table4.tex}
-%% \end{center}{}
-\subsection{Robustness and Balance Checks}
-
-\subsubsection{Reverse Causality for Treatment and Instrument}
-
+\paragraph{Exogenous Instrument} \label{exo}
 \begin{table}[ht]
   \begin{center}
     \scalebox{0.75}{
@@ -210,6 +226,83 @@ I was able to reproduce the authors' null result \ref{table:1}.
     \label{table:4}
   \end{center}
 \end{table}
+
+\paragraph{Monotonicity}
+
+\begin{figure}[h]
+  \centering
+  \scalebox{0.5}{
+    \includegraphics{replication/output/fig_a4.png}
+  }
+  \caption{McCrary Density Test}
+  \label{fig:density}
+\end{figure}
+
+\subsection{Main Effect}
+
+\paragraph{IV Estimates of ATE} \label{ate:iv}
+
+\begin{table}[ht]
+  \begin{center}
+    \scalebox{0.75}{
+      \input{replication/output/table2.tex}
+    }
+    \caption{Instrumental Variable Results}
+    \label{table:2}
+  \end{center}
+\end{table}
+
+In table \ref{table:2}, we replicate the main estimate, the ATE of the proportional of seats won by secular leaders on religious violence across joined-districts and time. 
+
+\begin{table}[ht]
+  \begin{center}
+    \scalebox{0.75}{
+      \input{replication/output/table2_cr2.tex}
+    }
+    \caption{IV with CR2 SE estimation}
+    \label{table:2_cr2}
+  \end{center}
+\end{table}
+
+However, it is important to note that the significance of these estimates are sensitive to the standard error estimation strategy (\texttt{stata}).
+In table \ref{table:2_cr2}, I recalculated the effects using \texttt{CR2} standard error estimation and the effect for \textit{Any Killed} was no longer significant.
+
+\paragraph{DIM estimates of ATE}
+
+\begin{table}[ht]
+  \begin{center}
+    \scalebox{0.75}{
+      \input{replication/output/table3.tex}
+    }
+    \caption{Difference in Means Estimate}
+    \label{table:3}
+  \end{center}
+\end{table}
+
+In an effort to appeal to the strength of their data and design, the authors attempt to estimate the \texttt{ATE} using the difference-in-means estimator (table \ref{table:3}).
+To this end, the authors restrict the dataset to 59 years and joined-district points where there was a single close election between secular and Islamist candidates. I was able to replicate the original findings, with a significant negative effect for \textit{Any Event, Event Count} and \textit{Number of Days}.
+
+
+\begin{table}[ht]
+  \begin{center}
+    \scalebox{0.75}{
+      \input{replication/output/table3_cr2.tex}
+    }
+    \caption{DIM ATE with CR2 SE Estimation}
+    \label{table:3_cr2}
+  \end{center}
+\end{table}
+
+Table \ref{table:3_cr2} shows the results calculated with \texttt{CR2} standard errors. 
+
+It is important to note that while the DIM estimates are significant, the authors previously described confounders (\ref{fig:ate_dim}) that would bias the DIM estimate (cite?).
+In particular, without $X_{i,t}$, geographic or time-varying interference may be present.
+Figure (TODO) shows that the IV and DIM estimates for the ATE do indeed significantly differ. 
+
+\subsection{Robustness and Balance Checks}
+
+\subsubsection{Reverse Causality for Treatment and Instrument}
+
 
 The authors also computed the predictive capacity of the instrument for lagged violence.
 These results are reported in table \ref{table:4} which replicate the source.

@@ -8,9 +8,7 @@
 \usepackage{csquotes}
 \usepackage{hyperref}
 \usepackage{amsmath}
-\usepackage{biblatex}
 
-\addbibresource{main.bib}
 
 \title{PLSC 504: Replication Term Paper}
 \subtitle{Secular Party Rule and Religious Violence in Pakistan}
@@ -27,7 +25,7 @@ Do terrorists cause violence in response to secular incumbency or does secular i
 
 The period of $1998 \rightarrow 2003$ in Pakistan offers a "natural experiment" due to a plurality of first-past-the-post elections where both Islamist and secular leaders competed for local elections.
 These elections determine the Members of the National Assembly (MNA), who are responsible for implementing local policies at the behest of their constituency.
-The authors claim that secular victories within a MNA district attenuate violence at the district level, possibly moderated by police infrastructure. 
+The authors claim that secular victories within a MNA district attenuate violence at the district level, possibly moderated by police infrastructure \cite{nellis_siddiqui_2018}. 
 
 \section{Design} \label{design}
 
@@ -119,7 +117,7 @@ The authors rigorously defend the exogeneity of the instrument by ensuring that 
 While the original work does not explicitly mentioned the assumption of monotonicity, the presence of defiers would be nearly impossible.
 For defiers to be present, a joined-district would have to nominate a losing candidate.
 This is incredibly illogical in an adversarial, first-past-the-post system.
-However, the authors note that corruption at the ballot counting office may lead to a just barely winning secularist candidate to nominated.
+However, the authors note that corruption at the ballot counting office may lead to the nomination of a just barely losing candidate.
 To this end, the authors calculate a density test on the instrument (figure \ref{fig:density}).
 
 The Non-interference assumption is defended by a combination of lagged predictions in defending exogeneity \ref{exo} and the inclusion of the proportion of close races, $X_{i,t}$, and province-level fixed effects $\theta_p$.
@@ -243,7 +241,7 @@ Further analysis, shows that the instrument does not predict a variety of pre-tr
 \end{figure}
 %% TODO: Add mccrary test table
 
-In an effort to obviate concerns of sorting described in \ref{iv}, the authors perform a density test that shows a null result (fig \ref{fig:density}).
+In an effort to obviate concerns of sorting described in \ref{iv}, the authors perform a density test that shows a null result (fig \ref{fig:density}) \cite{mccrary_2008}.
 While this cannot conclusively rule out sorting or attrition, a null result suggests that treatment is as good as random under the instrument (TODO: cite McCrary). 
 
 \subsection{Main Effect}
@@ -291,7 +289,7 @@ In an effort to appeal to the strength of their data and design, the authors att
 To this end, the authors restrict the dataset to 59 years and joined-district points where there was a single close election between secular and Islamist candidates. I was able to replicate the original findings, with a significant negative effect for \textit{Any Event, Event Count} and \textit{Number of Days}.
 
 
-\begin{table}[ht]
+\begin{table}[ht!]
   \begin{center}
     \scalebox{0.75}{
       \input{replication/output/table3_cr2.tex}
@@ -315,7 +313,7 @@ The later section of the source, the authors perform explanatory analysis to ill
 To test their prediction, the authors estimate the causal effect of religious violence in the previous term on the proportion of secular MNA seats in the following election.
 I was able to reproduce these estimates in full (table \ref{table:mechanisms})
 
-\begin{table}[ht]
+\begin{table}[ht!]
   \begin{center}
     \scalebox{0.75}{
       \input{replication/output/mechanisms.tex}
@@ -334,6 +332,12 @@ I was able to reproduce these estimates in full (table \ref{table:mechanisms})
 The authors illustrate potential mechanisms for their main finding (the reduction of religious violence due to secular victories). These include electoral incentives (in terms of voter accountability if religious violence does arise in the presence of a secular district), politician characteristics, state capacity (concentration of police force in secular districts).
 
 \section{Conclusion}
+
+
+\medskip
+
+\bibliography{main}
+\bibliographystyle{unsrt}
 
 
 \end{document}

@@ -17,37 +17,39 @@ run_iv <- function(dep_var, right_hand, se_type) {
                            include.fstatistic = TRUE)
 }
 
-# ivregress 2sls any_violence secular_close_race (secular_win = secular_close_win) i.province, cl(cluster_var)
 righthand <- "secular_win + secular_close_race + factor(province) | secular_close_win + secular_close_race + factor(province)"
 
-## replicate table 2 - ITT estimates
-dependent_vars <- c("any_violence", "ln_eventcount", "any_killed", "ln_numberkilled",
-                        "ln_duration")
+dependent_vars <- c("area_gis", 
+                    "pacca_pct", 
+                    "electricity_pct", 
+                    "gas_pct",
+                    "lit_t",
+                    "lit_f",
+                    "pri_sch_pc")
+
 results_stata <- lapply(dependent_vars, function(d) run_iv(d, righthand, "stata"))
 # results_cr2 <- lapply(dependent_vars, function(d) run_iv(d, righthand, "CR2"))
 
 results <- results_stata
-variable_names <- c("Any Event", "Event Count", "Any Killed", "Number Killed", "Number Days")
+variable_names <- c("Area",
+                    "Pacca Prop. HHs",
+                    "Elecriticy",
+                    "Gas",
+                    "Total Literacy", 
+                    "Female Literacy",
+                    "Primary Schools")
 
 
 texreg(results,
-       file = "output/iv_ate.tex",
+       file = "output/pretreatment_census.tex",
        stars = c(0.01, 0.05, 0.1),
        custom.coef.map = list(secular_win = "Prop. Secular Win",
                               secular_close_race = "Prop. Secular Close Race"),
        custom.model.names = variable_names,
        digits = 3,
        custom.note = ("\\parbox{.4\\linewidth}{\\vspace{2pt}%stars. \\\\
-       Robust SEs clustered by cluster-district area, in brackets\\\\ F-statistic reported for Prop. Secular Win}"),
-       table = FALSE)
-
-texreg(results[1],
-       file = "output/iv_ate_single.tex",
-       stars = c(0.01, 0.05, 0.1),
-       custom.coef.map = list(secular_win = "Prop. Secular Win",
-                              secular_close_race = "Prop. Secular Close Race"),
-       custom.model.names = variable_names[1],
-       digits = 3,
-       custom.note = ("\\parbox{.4\\linewidth}{\\vspace{2pt}%stars. \\\\
+       Electoral outcomes for 1988, 1990, 1993, and 1997 are used to predict (as a falsiﬁcation test) census outcomes measured in
+1981; electoral outcomes for 2002 and 2008 are used to predict census outcomes measured in 1998. Sample sizes vary somewhat
+across models due to missingness in some census data. Missingness is minimal and appears to be unsystematic.\\\\
        Robust SEs clustered by cluster-district area, in brackets\\\\ F-statistic reported for Prop. Secular Win}"),
        table = FALSE)

@@ -37,14 +37,28 @@ data %>%
 dev.off()
 
 # Y on X
+
+# New facet label names for supp variable
+# dependent_vars <- c("any_violence", "ln_eventcount", "any_killed", "ln_numberkilled",
+# "ln_duration")
+labels <- list(
+  "any_violence" = "Any Event", 
+  "ln_eventcount" = "Event Count", 
+  "any_killed" = "Any Killed", 
+  "ln_numberkilled" = "Number Killed", 
+  "ln_duration" = "Number Days")
+my_labeler <- function(variable, value){
+  return(labels[value])
+}
 png("output/Y_on_Z.png", width = 800, height = 600)
 data %>%
-  select(-x, -d) %>%
-  gather(-z, key = "Cov", value = "Val") %>%
-  ggplot(aes(y = Val, x = z)) +
+  select(-x) %>%
+  gather(-d, -z, key = "Dep", value = "Val") %>%
+  ggplot(aes(y = Val, x = z, color = d)) +
   labs(x = "Instrument", y = "Violence") +
   geom_point() +
-  facet_wrap(~ Cov, scales = "free") +
+  facet_wrap(~ Dep, scales = "free",
+             labeller = my_labeler) +
   theme_bw() + 
   theme(strip.text.x = element_text(size = 15)) + 
   # theme_bw() + 

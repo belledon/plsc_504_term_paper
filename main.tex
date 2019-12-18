@@ -22,7 +22,6 @@
 
 \section{Introduction}
 
-Do terrorists cause violence in response to secular incumbency or does secular incumbency occur in response to terrorist violence?
 
 RD in polysci
 
@@ -33,7 +32,7 @@ The authors claim that secular victories within a MNA district attenuate violenc
 
 The original authors develop a novel unit of observation (\ref{quote:joined-distict}) in an effort to mitigate geographical missmatch between the outcome variable, reports on religious violence, and treatment, secular victories. 
 As a result, the authors employ a sophisticated answer strategy around these units.
-In this work, I both replicate the main findings and explore the implications for this strategy in simulation that support the original findings.
+In this work, I both replicate the main findings and explore the implications for this strategy. Finally, I offer some modest extensions by reporting a more clearly interpretable estimand, the ITT and discuss future simulation work.
 
 \section{Design} \label{design}
 
@@ -180,32 +179,7 @@ Where
 
 Here \ref{eq:2} refers to the first stage and \ref{eq:3} refers to the estimator of the \texttt{LATE} localized to close races between secular and Islamist MNA elections.  
 
-\begin{figure}
-  \begin{subfigure}{.5\textwidth}
-    \centering
-    \includegraphics[width=.95\linewidth]{replication/output/D_on_Z.png}
-    \label{fig:sfig1}
-  \end{subfigure}%
-  \begin{subfigure}{.5\textwidth}
-    \centering
-    \includegraphics[width=.95\linewidth]{replication/output/X_on_Z.png}
-    \label{fig:sfig2}
-  \end{subfigure}
-  \caption{Visualized the data}
-  \label{fig:the_data}
-\end{figure}
-
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\linewidth]{replication/output/Y_on_Z.png}
-    \caption{Religious Violence Across instrument}
-    \label{fig:Y_on_Z}
-\end{figure}
-
-To give insight to how the outcome variables, treatment, and covariate ($X$) vary with the instrument, I visualized figure \ref{fig:the_data} \ref{fig:Y_on_Z}.
-
-\section{Results}
+\section{Replication Results}
 \subsection{Estimates for the LATE} \label{late_results}
 
 \begin{table}[ht]
@@ -266,17 +240,6 @@ Table \ref{table:dim_cr2} shows the results calculated with \texttt{CR2} standar
 A key component to an IV design is a non-zero first stage \ref{iv}. In other words, the exogenous instrument, $Z_{i,t}$ must have a statistically significant effect on treatment, $D_{i,t}$.
 Table \ref{table:first_stage} replicates the original work where the proportion of close wins by secular candidates has a strong effect on the proportion of secular wins by any margin (eq \ref{eq:2}).
 
-%% TODO: Explore validation of exclusion restriction
-%% \paragraph{Exclusion Restriction}
-%% \begin{table}[ht]
-%%   \begin{center}
-%%     \scalebox{0.725}{
-%%       \input{replication/output/exclusion_restriction.tex}
-%%     }
-%%     \caption{Exclusion Restriction}
-%%     \label{table:exclusion_restriction}
-%%   \end{center}
-%% \end{table}
 
 \paragraph{Exogenous Instrument} \label{exo}
 \begin{table}[ht]
@@ -304,50 +267,168 @@ However, it is important to note that the instrument can predict $Y_{i,t-1}$.
 The authors explore this correlation in \ref{table:4}, showing that close secular races tend to occur in low violence joined-districts.
 Further analysis, shows that the instrument does not predict a variety of pre-treatment covariates such as agricultural production, education, and civil infastructure \ref{table:pretreatment_census}.
 
-\paragraph{Monotonicity}
+\paragraph{Sorting}
 
-\begin{figure}[h]
-  \centering
-  \scalebox{0.5}{
-    \includegraphics{replication/output/fig_a4.png}
-  }
-  \caption{McCrary Density Test}
-  \label{fig:density}
-\end{figure}
-%% TODO: Add mccrary test table
 
 In an effort to obviate concerns of sorting described in \ref{iv}, the authors perform a density test that shows a null result (fig \ref{fig:density}) \cite{mccrary_2008}.
-While this cannot conclusively rule out sorting or attrition, a null result suggests that treatment is as good as random under the instrument (TODO: cite McCrary). 
+While this cannot conclusively rule out sorting or attrition, a null result suggests that treatment is as good as random under the instrument \cite{Cataneo_2019}. 
 
-\subsection{Mechanisms}
+\paragraph{Bandwidth selection}
+Given the unit description, the instrument contains a decision on the bandwidth for what defines a ``close'' election,
+it is not feasable to perform robust bandwidth selection (see \cite{Cataneo_2019}).
+Instead, the instrument must be re-defined around a proposed bandwith.
+In table \ref{table:bandwith_2pct}, \ref{table:bandwith_2p5pct}, \ref{table:bandwith_3p5pct}, I replicate a series of robustness checks by increases and decreasing the bandwidth with no strong difference in the main effect. 
 
-The later section of the source, the authors perform explanatory analysis to illustrate potential mechanisms of secular MNA seats on religious violence. One explored avenue was the electoral accountability. The authors claim that secular leaders often include diminished religious violence as a campaign promise. The authors then predict that secular MNA candidates expect to suffer in future elections if religious violence does occur during their tenure. 
+%% \subsection{Mechanisms}
 
-To test their prediction, the authors estimate the causal effect of religious violence in the previous term on the proportion of secular MNA seats in the following election.
-I was able to reproduce these estimates in full (table \ref{table:mechanisms})
+%% The later section of the source, the authors perform explanatory analysis to illustrate potential mechanisms of secular MNA seats on religious violence. One explored avenue was the electoral accountability. The authors claim that secular leaders often include diminished religious violence as a campaign promise. The authors then predict that secular MNA candidates expect to suffer in future elections if religious violence does occur during their tenure. 
 
-\begin{table}[ht!]
-  \begin{center}
-    \scalebox{0.75}{
-      \input{replication/output/mechanisms.tex}
-    }
-    \caption{Mechanisms - Electoral Incentives}
-    \label{table:mechanisms}
-  \end{center}
-\end{table}
+%% To test their prediction, the authors estimate the causal effect of religious violence in the previous term on the proportion of secular MNA seats in the following election.
+%% I was able to reproduce these estimates in full (table \ref{table:mechanisms})
+
+%% \begin{table}[ht!]
+%%   \begin{center}
+%%     \scalebox{0.75}{
+%%       \input{replication/output/mechanisms.tex}
+%%     }
+%%     \caption{Mechanisms - Electoral Incentives}
+%%     \label{table:mechanisms}
+%%   \end{center}
+%% \end{table}
 
 
 
 \section{Extensions} \label{extensions}
 
-\subsection{Fuzzy RD 2 - Electric Bugaloo}
+One of the most complicated components of \textit{Nellis 2018} is their IV estimation strategy.
+The authors admit that this is their driving factor for including and DIM estimation of the ATE \ref{table:dim}.
+The IV strategy here formally leads to a doubly local estimand where the bandwidth specification localizes the LATE to secular victories within that margin and to units that act as compliers.
 
-ITT
+Here is where the complexity of the design muddles possible interpretations. As mentioned in \ref{iv}, the notion of compliers is not clear under a causal interpretation. Its not immediately clear how the proportion of close secularist victories have a \textit{causal effect} on the proportion of secularist victories regardless of margin. 
 
-\subsection{A case for Binary Treatment}
+In the next few sections, I will visualize the data in support of motivating a different estimand, the ITT, as well as proposing a different identification strategy for the LATE.
+
+\subsection{Plotting the data}
+
+\begin{figure}[h!]
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.95\linewidth]{replication/output/D_on_Z.png}
+    \label{fig:sfig1}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.95\linewidth]{replication/output/X_on_Z.png}
+    \label{fig:sfig2}
+  \end{subfigure}
+  \caption{Visualized the data}
+  \label{fig:the_data}
+\end{figure}
 
 
-\section{Discussion}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{replication/output/Y_on_Z.png}
+  \caption{Religious Violence Across instrument}
+  \label{fig:Y_on_Z}
+\end{figure}
+
+To give insight to how the outcome variables, treatment, and covariate ($X$) vary with the instrument, I visualized figure \ref{fig:the_data} \ref{fig:Y_on_Z}.
+As shown in figure \ref{fig:the_data}, the treatment variable is always bound to the left of the instrument not due to a structural process but because of a tautological construction. 
+This may be in part responsible for the strong first stage \ref{table:first_stage}.
+This is similarly true for the covariate used to ensure exogeneity of the instrument \ref{iv}.
+
+\subsection{The LATE vs the ITT}
+
+Without a clear causal relationship between the instrument and the probability of treatment receipt, it becomes difficult to interpret the reproduced IV estimate as the intended LATE.
+Crucially, if the first stage is non-causal, then the resulting IV estimate is merely the ITT scaled by some unknown quantity.
+
+For this reason, I report the ITT as the reduced form (eq \ref{eq:itt}) of the currently defined instrument in table \ref{table:itt}.
+
+\begin{equation} \label{eq:itt}
+  Y_{i,t} = \mu + \beta * Z_{i,t} + \kappa*X_{i,t} + \theta_p + v_{i,t}
+\end{equation}
+
+These data affirms the premise of \textit{Nellis 2018}, that secular victories in contested races leads to a decrease in violence.
+However, this estimate, again assumes a well identified instrument.
+It is possible that this reduced form is more akin to an ATE, with the instrument behaving not as a cause of treatment assignment but instead as treatment receipt. 
+In the next section (\ref{fuzzyrd}), I will explore a more traditional identification strategy using the current data.
+
+\begin{table}[h!]
+  \begin{center}
+    \scalebox{0.65}{
+      \input{replication/output/lm_itt.tex}
+    }
+    \caption{ITT Estimate}
+    \label{table:itt}
+  \end{center}
+\end{table}
+
+\subsection{Fuzzy RD} \label{fuzzyrd}
+
+By selecting units where secularists won or lost in a all-or-none fashion, it becomes once again possible to identify the \texttt{LATE} according to sharp RD.
+While not as pure as isolated to \texttt{joined-districts} with only one election (not enough units), the average margin of victory/loss can be used as the running variable for secularist victory (cutoff = $0$). 
+
+Figure \ref{fig:fuzzy_rd_treatment} and \ref{table:fuzzy_rd_first_stage} show that the selected units have a high proportion of compliers.
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{replication/output/fuzzy_rd_treatment.png}
+  \caption{Secular Victory Across Margin of Victory}
+  \label{fig:fuzzy_rd_treatment}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{replication/output/fuzzy_rd_data.png}
+  \caption{Religious Violence Across Margin of Victory}
+  \label{fig:fuzzy_rd_data}
+\end{figure}
+
+Figure \ref{fig:fuzzy_rd_data} visualizes how each of the dependent variables varies across the running variable. 
+
+
+
+
+I report the LATE estimated via the MSE optimal bandwidth and first order polynomial in table \ref{table:fuzzy_rd_late}.
+A placebo check on the cutoff was performed, showing that the estimated effect vanishes as the cutoff goes away from zero \ref{fig:fuzzy_rd_cutoffs}
+A density test on the running variable was attempted using the methods implemented in \textit{Cattaneo et al 2018} but there where not enough units for proper estimation \cite{cattaneo_2018}.
+
+\begin{table}[h!]
+  \begin{center}
+    \scalebox{0.75}{
+      \input{replication/output/extensions_fuzzy_rd.tex}
+    }
+    \caption{LATE Estimate for Margin of Victory/Loss}
+    \label{table:fuzzy_rd_late}
+  \end{center}
+\end{table}
+
+
+With respect to the \texttt{ITT}, table \ref{table:fuzzy_rd_itt} suggests that increased secular support in \texttt{joined districts} leads to a reduction in violence.
+
+\begin{table}[h!]
+  \begin{center}
+    \scalebox{0.65}{
+      \input{replication/output/fuzzy_rd_itt.tex}
+    }
+    \caption{ITT Estimate for Margin of Victory/Loss}
+    \label{table:fuzzy_rd_itt}
+  \end{center}
+\end{table}
+
+
+
+\section{Future work}
+
+While the original results are well defended in terms of robustness and balance checks,
+\textit{Nellis 2018} highlights a 
+Recent developments in probabalistic programming and statistical tools such as \texttt{DeclareDesign} may offer incite in the power of this design \cite{declaredesign}.
+
+For example, by simulating individual constituencies that are effected by factors described in this domain, one could determine if the answer strategy proposed in the original work can lead to an unbiased estimate of the estimand.
+Additionally, one could explore what assumptions are required to recover the ATE using this design, such as the relaxation of monotonicity.
+
 
 \clearpage
 \section{Supplementary}
@@ -392,6 +473,65 @@ ITT
   \end{center}
 \end{table}
 
+\begin{table}[h!]
+  \begin{center}
+    \scalebox{0.65}{
+      \input{replication/output/bandwidth_2pct.tex}
+    }
+    \caption{IV LATE Estimate with $2\%$ margin of victory}
+    \label{table:bandwidth_2pct}
+  \end{center}
+\end{table}
+
+\begin{table}[h!]
+  \begin{center}
+    \scalebox{0.65}{
+      \input{replication/output/bandwidth_2p5pct.tex}
+    }
+    \caption{IV LATE Estimate with $2.5\%$ margin of victory}
+    \label{table:bandwidth_2p5pct}
+  \end{center}
+\end{table}
+
+\begin{table}[h!]
+  \begin{center}
+    \scalebox{0.65}{
+      \input{replication/output/bandwidth_3p5pct.tex}
+    }
+    \caption{ITT Estimate with $3.5\%$ margin of victory}
+    \label{table:bandwidth_3p5pct}
+  \end{center}
+\end{table}
+
+\begin{figure}[h]
+  \centering
+  \scalebox{0.5}{
+    \includegraphics{replication/output/fig_a4.png}
+  }
+  \caption{McCrary Density Test}
+  \label{fig:density}
+\end{figure}
+
+\begin{table}[h!]
+  \begin{center}
+    \scalebox{0.75}{
+      \input{replication/output/fuzzy_rd_first_stage.tex}
+    }
+    \caption{First stage for Margin of Victory/Loss}
+    \label{table:fuzzy_rd_first_stage}
+  \end{center}
+\end{table}
+
+\begin{figure}[h]
+  \centering
+  \scalebox{0.5}{
+    \includegraphics{replication/output/fuzzy_rd_cutoff_placebo.png}
+  }
+  \caption{Cutoff Placebo for LATE on Event Count}
+  \label{fig:fuzzy_rd_cutoffs}
+\end{figure}
+
+%% TODO: Add mccrary test table
 
 \clearpage
 

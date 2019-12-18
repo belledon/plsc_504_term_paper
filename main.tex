@@ -23,24 +23,22 @@
 \section{Introduction}
 
 
-RD in polysci
-
-
-The period of $1998 \rightarrow 2003$ in Pakistan offers a "natural experiment" due to a plurality of first-past-the-post elections where both Islamist and secular leaders competed for local elections.
+In \textit{Nellis \& Seddiqui 2018}, the authors take advantage of natural experiment in Pakistan to explore the causal effect of secular party rule on religious violence \cite{nellis_siddiqui_2018}.
+The period between $1998$ and $2003$ in Pakistan offers a "natural experiment" due to a plurality of first-past-the-post elections where both Islamist and secular leaders competed for local elections.
 These elections determine the Members of the National Assembly (MNA), who are responsible for implementing local policies at the behest of their constituency.
 The authors claim that secular victories within a MNA district attenuate violence at the district level, possibly moderated by police infrastructure \cite{nellis_siddiqui_2018}. 
+To evaluate their hypothesis, authors develop a novel unit of observation (\ref{unit}) in an effort to mitigate geographical mismatch between the outcome variable, reports on religious violence, and treatment, secular victories. 
+As a result, the authors employ a sophisticated answer strategy around these units to estimate the LATE of secular victories on religious violence.
 
-The original authors develop a novel unit of observation (\ref{quote:joined-distict}) in an effort to mitigate geographical missmatch between the outcome variable, reports on religious violence, and treatment, secular victories. 
-As a result, the authors employ a sophisticated answer strategy around these units.
-In this work, I both replicate the main findings and explore the implications for this strategy. Finally, I offer some modest extensions by reporting a more clearly interpretable estimand, the ITT and discuss future simulation work.
+In this work, I both replicate the main findings (\ref{late_results}) and explore the implications for this strategy. Finally, I offer some modest extensions (\ref{extensions}) by reporting a more clearly interpretable estimand (ITT), reformulate the identification strategy, and discuss future simulation work.
 
 \section{Design} \label{design}
 
 
 The authors aim to measure the local average treatment effect (LATE) of secular victories on violence in democratic elections for close elections between secularists and Islamists.
-Due to certain complexities in the construction of observed units, the usual sharp regression discontinuity design (RD) where the margin of victory acts as the running variable is not feasable.
+Due to certain complexities in the construction of observed units, the usual sharp regression discontinuity design (RD) where the margin of victory acts as the running variable is not feasible.
 Instead, the authors chose to employ an fuzzy RD estimation of the LATE using 2SLS under an instrumental variables (IV) approach.
-In the following section, I will visit the authors' defense for this design before replicating their main findings (\ref{main_effect}).
+In the following section, I will visit the authors' defense for this design before replicating their main findings (\ref{main_results}).
 
 \subsection{Data} \label{data}
 
@@ -55,7 +53,7 @@ Rather than interpolating violence at the district level to the constituency lev
 \end{displayquote}
 
 Importantly, the \texttt{joined-districts} have reorganized over time.
-Both administrative districts and MNA constituencies where partially reorganized in 2002 (TODO cite?).
+Both administrative districts and MNA constituencies where partially reorganized in 2002.
 The authors note concern regarding autocorrelation of \texttt{joined-districts} that where previously members of the same unit. 
 This leads to the introduction of a second unit, the \texttt{cluster districts}, that describes a second level of \texttt{joined-districts} defined as the smallest set of time-invariant administrative districts containing complete MNA constituencies between 1988 and 2013.
 In other words, \texttt{joined-districts} are subsets of \texttt{cluster districts} that the authors hope would capture any control for any error correlation among units at a given election year.
@@ -66,16 +64,16 @@ In other words, \texttt{joined-districts} are subsets of \texttt{cluster distric
 The authors use a variety of outcomes for religious violence for a particular joined-district $i$ at election $t$, $Y_{i,t}$.
 
 \begin{enumerate}
-\item Any Event: A binary variable that is \textit{True} if any form of religious violence occured during the MNA's time in office for that district
+\item Any Event: A binary variable that is \textit{True} if any form of religious violence occurred during the MNA's time in office for that district
 \item Any Killed: Similar to \textit{Any Event} but referring to any deaths
 \item Event Count: The number of religious-violent events
 \item Number Killed: The number of deaths caused by religious violence
-\item Number of days: The number of days in which at least one instance of religious violence occured.
+\item Number of days: The number of days in which at least one instance of religious violence occurred.
 \end{enumerate}
 
 For each of these, a violent event was considered religiously motivated if there was no explicit evidence to suggest the contrary.
 The authors defend this criteria by noting that the majority of religious violence is labeled as politically motivated due to the perpetrators belonging to religious political groups.
-Additionally, the authors perform robustness checks by removing units in the Karachi and Balochistan provinces as those regions have a high proportion of political violence arising from non-religiously motivated assassination (TODO cite, ref result). 
+Additionally, the authors perform robustness checks by removing units in the Karachi and Balochistan provinces as those regions have a high proportion of political violence arising from non-religiously motivated assassination. 
 
 \subsubsection{The Treatment Variable} \label{treatment}
 
@@ -106,7 +104,7 @@ Given the domain and design there are several probable sources of bias with this
 
 \begin{enumerate}
 \item  Time lagged treatment and outcomes: \texttt{joined-districts} with histories of religious violence may seek out / distrust secularists. 
-\item Confounding variables: Covariates such as state capacity, education, economic stability may both impact popular opinion of secular vs religious candidates differentially
+\item Confounding variables: Covariates such as state capacity, education, economic stability may both impact popular opinion of secular vs religious candidates deferentially
 \item provincial FEs?
 \item autocorrelation across temporally varying units: As mentioned in \ref{unit}, since some group of units at time $t$ to have been part of the same unit a $t-1$, it is possible for the error terms across those units to be correlated. (Note this would bias the estimate of SE)
 \end{enumerate}
@@ -123,7 +121,7 @@ Rather than margin of victory serving as the running variable, the authors inste
 This exogenous regressor, $Z_{i,t}$, cannot be used as a running variable as it does not have a clear cutoff without additional assumptions.
 Thus, the authors settle on instrumental variables estimation even though the instrument, in this case, covaries with treatment out of logical construction rather than causal relation.
 
-In addition to the instrument, the authors attempt to control for unobserved covariates that would influence the proportion of close secularist victories by controlling for the proportion of close races either won or lost by secular canditates by $\leq 3\%$, $X_{i,t}$.
+In addition to the instrument, the authors attempt to control for unobserved covariates that would influence the proportion of close secularist victories by controlling for the proportion of close races either won or lost by secular candidates by $\leq 3\%$, $X_{i,t}$.
 In the Extensions section (\ref{extensions}), I will present criticism of this answer strategy and offer alternatives revolving around binary treatment variables and single election districts.
 
 The 2SLS answer strategy requires the following assumptions \cite{morgan_2015, Imbens_2008, Cattaneo_2019}.
@@ -146,7 +144,7 @@ While the original work does not explicitly mentioned the assumption of \texttt{
 
 \paragraph{Fixed Effects}
 The original compilers of the BFRS dataset recommend using province level fixed effects, $\theta_p$ in order to control for regional differences in reporting behavior.
-However, the authors note that excluding FE did not change the main estimates. (TODO add figure in results)
+However, the authors note that excluding FE did not change the main estimates. 
 
 
 \begin{figure}[h]
@@ -179,7 +177,7 @@ Where
 
 Here \ref{eq:2} refers to the first stage and \ref{eq:3} refers to the estimator of the \texttt{LATE} localized to close races between secular and Islamist MNA elections.  
 
-\section{Replication Results}
+\section{Replication Results} \label{main_results}
 \subsection{Estimates for the LATE} \label{late_results}
 
 \begin{table}[ht]
@@ -275,9 +273,9 @@ While this cannot conclusively rule out sorting or attrition, a null result sugg
 
 \paragraph{Bandwidth selection}
 Given the unit description, the instrument contains a decision on the bandwidth for what defines a ``close'' election,
-it is not feasable to perform robust bandwidth selection (see \cite{Cataneo_2019}).
-Instead, the instrument must be re-defined around a proposed bandwith.
-In table \ref{table:bandwith_2pct}, \ref{table:bandwith_2p5pct}, \ref{table:bandwith_3p5pct}, I replicate a series of robustness checks by increases and decreasing the bandwidth with no strong difference in the main effect. 
+it is not feasible to perform robust bandwidth selection (as in \cite{Cattaneo_2019}).
+Instead, the instrument must be re-defined around a proposed bandwidth.
+In table \ref{table:bandwidth_2pct}, \ref{table:bandwidth_2p5pct}, \ref{table:bandwidth_3p5pct}, I replicate a series of robustness checks by increases and decreasing the bandwidth with no strong difference in the main effect. 
 
 %% \subsection{Mechanisms}
 
@@ -390,7 +388,6 @@ Figure \ref{fig:fuzzy_rd_data} visualizes how each of the dependent variables va
 
 
 
-
 I report the LATE estimated via the MSE optimal bandwidth and first order polynomial in table \ref{table:fuzzy_rd_late}.
 A placebo check on the cutoff was performed, showing that the estimated effect vanishes as the cutoff goes away from zero \ref{fig:fuzzy_rd_cutoffs}
 A density test on the running variable was attempted using the methods implemented in \textit{Cattaneo et al 2018} but there where not enough units for proper estimation \cite{cattaneo_2018}.
@@ -418,16 +415,24 @@ With respect to the \texttt{ITT}, table \ref{table:fuzzy_rd_itt} suggests that i
   \end{center}
 \end{table}
 
+Together, the results of this section affirm the origin main effect. 
+When estimated the LATE where the instrument is the margin of victory, there is a strong estimated negative effect of secular victory on religious violence.
+Likewise, for both ITT estimates, there is a strong negative effect of votes on religious violence.
 
+\section{Conclusion}
 
-\section{Future work}
+While the original results are well defended in terms of robustness and balance checks, \textit{Nellis 2018} highlights a space of concern.
+In an effort to perform causal inference over an increasingly complex world, it is tempting to conjure sophisticated answer strategies to tease apart every bit of covariance in available data.
+However, at the extreme, this begins to parallel the era of \textit{mass produced} statistics where behemoth estimation strategies are supported by a monolith of sanctity tests \cite{freedman_1985}.
 
-While the original results are well defended in terms of robustness and balance checks,
-\textit{Nellis 2018} highlights a 
-Recent developments in probabalistic programming and statistical tools such as \texttt{DeclareDesign} may offer incite in the power of this design \cite{declaredesign}.
+To be clear, \textit{Nellis 2018} is not guilty of this.
+In fact, quite the contrary; the authors' last remarks highlight the need to obtain more geographically focused data.
+From the perspective of measuring out bootstraps, the investigations of the original paper (many of which where not included here) suggest that there may be gold in yonder hills. 
+That being said, there is plenty of leather to search for data suited for a clearer answer strategy \cite{freedman_1991}.
 
-For example, by simulating individual constituencies that are effected by factors described in this domain, one could determine if the answer strategy proposed in the original work can lead to an unbiased estimate of the estimand.
-Additionally, one could explore what assumptions are required to recover the ATE using this design, such as the relaxation of monotonicity.
+In the meantime, recent developments in probabalistic programming and statistical tools such as \texttt{DeclareDesign} may offer incite into the power of \textit{Nellis 2018} design \cite{declaredesign}.
+For example, by simulating individual constituencies that are effected by factors analogous to the present study, one could determine if the answer strategy proposed in the original work can lead to an unbiased estimate of the LATE or the ITT.
+%% Additionally, one could explore what assumptions are required to recover the ATE using this design, such as the relaxation of monotonicity.
 
 
 \clearpage
